@@ -1,0 +1,194 @@
+**Roteiro para elaboração da Súmula Curricular (em português)**
+
+*Última atualização em 1º de março de 2025*
+
+A Súmula Curricular (SC) é o documento de referência fundamental para a
+análise das qualificações dos pesquisadores que solicitam ou que
+participam de solicitações de financiamento à FAPESP. A SC serve para
+que a assessoria científica da Diretoria Científica conheça a
+experiência profissional do Pesquisador Responsável e dos membros da
+equipe de pesquisa.
+
+Toda solicitação inicial apresentada à FAPESP deve vir acompanhada da
+Súmula Curricular do Pesquisador Responsável e, quando for o caso, das
+Súmulas Curriculares de cada um dos Pesquisadores Principais e
+Pesquisadores Associados. As solicitações de Bolsas de Iniciação
+Científica, Mestrado, Doutorado Direto, Doutorado e de Pós-Doutorado
+devem incluir a Súmula Curricular dos candidatos, além da súmula do
+orientador/supervisor.
+
+A SC deve retratar a experiência profissional do pesquisador, seja ela
+acadêmica ou em institutos de pesquisa de missão dirigida, ou pesquisa
+em empresas ou organizações sociais. Como pode ser visto no modelo
+abaixo, alguns quesitos aplicam-se a todos, alguns só a pesquisadores
+acadêmicos e outros são mais adequados a pesquisadores de empresas. Cabe
+aos interessados escolher que itens pretendem valorizar, podendo a
+súmula diferir conforme o tipo de Auxílio ou Bolsa almejado.
+
+A Súmula Curricular deve ter até quatro páginas em papel A-4 com margens
+de pelo menos 2,5 cm do lado esquerdo e 2 cm nos demais lados, impressa
+com tipo de tamanho legível (Arial 10 pt ou Calibri 11 pt, por exemplo).
+
+Caso a Súmula Curricular apresentada tenha mais de quatro páginas, só
+serão incorporadas ao processo em análise as primeiras quatro páginas.
+
+A Súmula Curricular deve ser organizada em seis seções. Todas as seções
+deverão ser preenchidas, mesmo que com a expressão "NADA A DECLARAR", se
+for o caso. As seis seções são:
+
+1\) Formação;
+
+2\) Histórico Profissional/Acadêmico;
+
+3) Contribuições à Ciência (Científicas, Tecnológicas ou de Inovação);
+
+4\) Financiamentos à Pesquisa;
+
+5\) Indicadores Quantitativos;
+
+6\) Outras Informações Relevantes.
+
+**Modelo para Súmula Curricular**
+
++-----------------------------------------------------------------------+
+| > **Nome:**                                                           |
+| >                                                                     |
+| > Orcid (obrigatório): *(informar link)*                              |
+| >                                                                     |
+| > Currículo Lattes: *(informar link)*                                 |
+| >                                                                     |
+| > Web of Science: *(informar link)*                                   |
+| >                                                                     |
+| > MyCitation (Google Scholar): *(informar link)*                      |
+| >                                                                     |
+| > **1) Formação**                                                     |
+| >                                                                     |
+| > Indicar títulos, formação acadêmica (graduação, mestrado,           |
+| > doutorado, residência, livre-docência, pós-doutorado) e outros      |
+| > treinamentos e certificações. Inserir mais linhas, se necessário.   |
+|                                                                       |
+|   ------------------------------------------------------------------- |
+|    Título ou atividade    Ano de início e de   Instituição de ensino  |
+|                                término                                |
+|   --------------------- ---------------------- ---------------------- |
+|                                                                       |
+|                                                                       |
+|                                                                       |
+|                                                                       |
+|                                                                       |
+|                                                                       |
+|                                                                       |
+|                                                                       |
+|                                                                       |
+|   ------------------------------------------------------------------- |
+|                                                                       |
+| > **1.1) Formação -- Informações Adicionais**                         |
+| >                                                                     |
+| > Informar eventuais interrupções/afastamentos em razão do advento de |
+| > prole, de deficiência, de incapacidades temporárias ou de cuidados  |
+| > intensivos a pessoas enfermas, idosas ou com deficiência, conforme  |
+| > previsto pela Portaria PR nº 171/2024 (<https://fapesp.br/16724>).  |
+| >                                                                     |
+| > Além de incluir essa informação na SC, deve-se encaminhar consulta  |
+| > prévia de elegibilidade, conforme disposto na Portaria PR n.        |
+| > 171/2024.                                                           |
+|                                                                       |
+| **2)** **Histórico Profissional/Acadêmico **                          |
+|                                                                       |
+| > Listar até 3 principais posições profissionais que ocupou,          |
+| > informando datas de início e término (mês/ano) e instituições.      |
+| > Essas posições podem ser acadêmicas, empresariais ou                |
+| > administrativas, como a gestão de grandes projetos ou de            |
+| > instituições de ensino e pesquisa. Podem também ser listadas        |
+| > atividades associativas (participação em associações, federações,   |
+| > comissões temáticas/técnicas, conselhos de                          |
+| > empresas/institutos/universidades), bem como atuação em             |
+| > empreendedorismo e startups e distinções acadêmicas e prêmios       |
+| > recebidos.                                                          |
+|                                                                       |
+| **3) Contribuições à Ciência (Científicas, Tecnológicas ou de         |
+| Inovação)**                                                           |
+|                                                                       |
+| > 3.a) Listar até 5 pesquisas/produtos mais relevantes (incluindo     |
+| > pesquisas/produtos/contribuições ao desenvolvimento tecnológico e à |
+| > inovação dos últimos 5 anos), podendo ser artigos científicos,      |
+| > livros, capítulos de livros, palestras a convite, patentes          |
+| > (solicitadas, concedidas e especialmente as licenciadas), softwares |
+| > registrados, cultivares, empresas de base tecnológica criadas,      |
+| > relatórios técnicos de projetos que liderou ou em que teve papel    |
+| > destacado, novos produtos, novos processos ou outros tipos de       |
+| > resultados de pesquisa mais relevantes que se relacionam a seu      |
+| > projeto desta submissão. Todos os autores, até um máximo de 15,     |
+| > deverão constar da citação. Usar o padrão bibliográfico             |
+| > convencional em sua área. Das listas com mais de 5 itens, a FAPESP  |
+| > somente utilizará no processo de análise os 5 primeiros.            |
+| >                                                                     |
+| > 3.b) Incluir, em cada resultado, a justificativa da escolha:        |
+| > impacto (social, científico, econômico, tecnológico, em inovação    |
+| > etc.), relevância para a análise de sua produção -- científica,     |
+| > tecnológica e em inovação -- e importância para seus projetos de    |
+| > pesquisa em andamento/propostos, em no máximo 5 linhas.             |
+| >                                                                     |
+| > **4) Financiamentos à Pesquisa**                                    |
+| >                                                                     |
+| > Informar financiamentos à pesquisa mais relevantes (máximo de 5),   |
+| > vigentes e/ou concluídos, recebidos de agências ou empresas,        |
+| > brasileiras ou internacionais, como Pesquisador Responsável ou      |
+| > Pesquisador Principal.                                              |
+|                                                                       |
+| **5) Indicadores Quantitativos**                                      |
+|                                                                       |
+| > Indicação separada das quantidades totais de:                       |
+| >                                                                     |
+| > 1\) livros publicados;                                              |
+| >                                                                     |
+| > 2\) publicações em periódicos com seletiva política editorial;      |
+| >                                                                     |
+| > 3\) capítulos de livros;                                            |
+| >                                                                     |
+| > 4\) dissertações de Mestrado:                                       |
+| >                                                                     |
+| > 4.a) orientadas e já defendidas; e                                  |
+| >                                                                     |
+| > 4.b) em andamento;                                                  |
+| >                                                                     |
+| > 5\) teses de Doutorado:                                             |
+| >                                                                     |
+| > 5.a) orientadas e já defendidas; e                                  |
+| >                                                                     |
+| > 5.b) em andamento;                                                  |
+| >                                                                     |
+| > 6\) supervisões de Pós-Doutorado:                                   |
+| >                                                                     |
+| > 6.a) concluídas; e                                                  |
+| >                                                                     |
+| > 6.b) em andamento;                                                  |
+| >                                                                     |
+| > 7\) quantidade de citações recebidas na literatura científica       |
+| > internacional, segundo o Web of Science, Scopus ou Google Scholar;  |
+| >                                                                     |
+| > 8\) patentes solicitadas, concedidas e licenciadas;                 |
+| >                                                                     |
+| > 9\) produtos desenvolvidos e lançados no mercado;                   |
+| >                                                                     |
+| > 10\) processos otimizados implementados em empresas ou organizações |
+| > sociais;                                                            |
+| >                                                                     |
+| > 11\) empresas criadas ou apoiadas;                                  |
+| >                                                                     |
+| > 12\) consultorias técnicas e científicas relevantes.                |
+| >                                                                     |
+| > **6) Outras Informações Relevantes**                                |
+| >                                                                     |
+| > 6.a) Outras informações biográficas que julgar relevantes para a    |
+| > contextualização e análise de sua atividade profissional recente    |
+| > (últimos dez anos) e para documentar sua experiência e competência  |
+| > na área de conhecimento ou setor socioeconômico em que se insere o  |
+| > projeto proposto, ou em empreendedorismo e inovação.                |
+| >                                                                     |
+| > 6.b) Descreva sua experiência internacional em pesquisa após o      |
+| > doutoramento evidenciando sua participação em redes internacionais  |
+| > de colaboração em pesquisa com resultados publicados.               |
+| >                                                                     |
+| > 6.c) Prêmios, distinções e honrarias.                               |
++=======================================================================+
