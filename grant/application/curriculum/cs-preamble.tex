@@ -1,0 +1,177 @@
+% █▀▀ █▀   █▀█ █▀█ █▀▀ ▄▀█ █▀▄▀█ █▄▄ █   █▀▀
+% █▄▄ ▄█   █▀▀ █▀▄ ██▄ █▀█ █ ▀ █ █▄█ █▄▄ ██▄
+
+% NOTE: The packages (and related commands) in this preamble are loaded following the bellow ordering.
+% Packages related to:
+	% 1. Document canvas        >      i.e.  page geometry            
+	% 2. Typeface system        >      i.e.  used fonts               
+	% 3. Document structure     >      i.e.  headers formatting       
+	% 4. Floats                 >      i.e.  non-textual elements     
+	% 5. Micro-Layout           >      i.e. "inline" adjustments     
+	% 6. Finalization           >      i.e.  packages best loaded last
+
+%::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+%                                   1. CANVAS                                    
+%           Define document's physical space plus some basic utilities           
+%................................................................................
+% CANVAS
+\usepackage{geometry}		% Page geometry (margins configured in main file)
+\usepackage[brazil]{babel}	% Adjust document to the language it's written in
+
+% BASIC UTILITIES
+\usepackage{csquotes}		% Language-sensitive quoting;
+\usepackage[dvipsnames]{xcolor}	% Access to 68 named colors
+\usepackage{moresize}		% Additional font sizes
+\usepackage[normalem]{ulem}	% More underline styles (and aligns bottoms of multiple underlines)
+				% 'normalem' prevents underlines from altering \emph
+
+
+%::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+%                               2. TYPEFACE SYSTEM                               
+%    Define all fonts - for text, algorithms and math - used in the document     
+%................................................................................
+% 2.1 SYSTEM BACKEND
+\usepackage{fontspec}		% Native Unicode-to-OpenType mapping;
+				% Replaces legacy TeX font-enconding hacks;
+				% DOCUMENT MUST NOW BE COMPILED WITH Lua OR XeLaTex
+
+\usepackage{amsmath}		% AMS's package for mathematical typesetting
+\usepackage{mathtools}		% Extends amsmath's functionalities (i.e.: a superset)
+\usepackage[
+	math-style = ISO,
+	bold-style = ISO
+]{unicode-math}			% Must be loaded after 'mathtools';
+				% DOCUMENT MUST NOW BE COMPILED WITH Lua OR XeLaTex
+
+%. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+% 2.2 SYSTEM DEFINITION
+% 2.2.1 TEXT FONTS
+\setmainfont{Tex Gyre Pagella}[Scale = 1.0]
+\setsansfont{URW Classico}[
+	Scale = MatchLowercase,	% Ensure main and sans fonts are at the same scale
+]
+\setmonofont{Inconsolata}[Scale=MatchLowercase]
+
+% 2.2.2 MATH FONTS
+\setmathfont{Libertinus Math}[Scale=MatchLowercase]
+% Manually pick distinct calligraphic (Chancery hand) and script (Round hand) fonts for a greater variety of symbols
+\setmathfont{XITS Math}[
+	Scale 		= MatchLowercase,
+	range		= {cal,bfcal},
+	StylisticSet	= 1
+]
+\setmathfont{Libertinus Math}[
+	Scale 		= MatchLowercase,
+	range		= {scr,bfscr}
+]
+% Define a custom font face 'mathopfont' and use it to distinguish mathematical operators from prose
+\setmathfontface\mathopfont{Latin Modern Roman}[Scale=MatchLowercase]
+\setoperatorfont\mathopfont
+
+
+%::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+%                             3. DOCUMENT STRUCTURE                              
+%         Article structure assumed. Here, we just stylise their headers         
+%................................................................................
+\usepackage{titlesec}		% Controls vertical rhythm and heading aesthetics
+
+% STYLISE HEADINGS
+\titleformat{\section}
+    {\sffamily\bfseries}	% Format
+    {\thesection}		% Label
+    {1em}			% Space between number and title
+    {\MakeUppercase}		% Before-code
+\titleformat{\subsection}
+    {\sffamily\bfseries\small}	% Format
+    {\thesubsection}    	% Label
+    {1em}               	% Space between number and title
+    {\MakeUppercase}    	% Before-code
+%\titleformat{\subsubsection}
+%    {\sffamily\bfseries\small}	% Format
+%    {\thesubsubsection}	% Label
+%    {1em}               	% Space between number and title
+%    {\MakeUppercase}    	% Before-code
+%\titleformat{\paragraph}[runin]
+%    {\sffamily\bfseries}	% Format
+%    {\theparagraph}		% Label
+%    {1em}			% Space between number and title
+%    {}				% Before-code
+%\titlespacing*{\paragraph}
+%    {0pt}			% Left margin indentation
+%    {3.25ex plus 1ex minus .2ex}% Space BEFORE the paragraph title (vertical)
+%    {1em}			% Space AFTER the title (horizontal)
+
+%. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+% PAGINATIONG AND TRACKING
+\usepackage{fancyhdr}	% Custom headers and footers
+\pagestyle{fancy}
+\fancyhf{}				% Clear all default headers/footers
+% Defensive practice to keep my pages clearly identifiable
+% if the funding agencies' dossier gets scrambled
+\renewcommand{\headrulewidth}{0pt}	% Remove the default top line
+\fancyfoot[C]{\sffamily\small \thepage}
+\fancyfoot[R]{\sffamily\small Cody S. B. Setti -- Súmula Curricular}
+
+
+%::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+%                                    4. FLOATS                                   
+%               Manage Floating Content (e.g.: figures and tables)               
+%................................................................................
+% FLOATS IN GENERAL
+\usepackage{float}	% Provides [H] 'Here' float placement specifier (use with caution)
+\usepackage{subcaption}	% Format multiple images (tables) in one figure (table) environment
+			% NOTE: This package *automatically* loads the 'caption' package,
+\captionsetup{
+	labelfont = {small,bf},
+	textfont  = {small,it}
+}
+%\subcaptionsetup{...}	% Uncomment to customize sub-captions separately
+
+%. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+% TABLES
+\usepackage{booktabs}	% Format tables following scientific convention
+\usepackage{multirow}	% Allow multirow cells in tables
+\usepackage{tabularx}	% Auto-adjust column widths to fill a specified amount
+
+
+%::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+%                             5. MICRO-LAYOUT                              
+%                       Packages that alter "inline" text                        
+%................................................................................
+\usepackage{enumitem}		% Customize list environments (provides 'resume')
+\setlist{nosep, leftmargin=*}	% Compresses list vertical spacing globally
+
+\usepackage{multicol}		% Environment with multiple columns of text
+\usepackage{fontawesome5}	% For Orcid's logo
+\usepackage{academicons}	% For Google Scholar's logo
+\usepackage{graphics}		% For manually inserting Lattes' and WoS' logos
+
+
+%:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+%                                 6. FINALIZATION                                 
+%                 Packages that patch others. MUST BE LOADED LAST                 
+%.................................................................................
+% BIBLIOGRAPHY                                   
+\usepackage[
+	backend	 = biber,	% Use Biber backend (more powerful than BibTex)
+	style	 = numeric,
+	backref	 = true,
+	maxnames = 15,		% Enforces the FAPESP 15-author maximum rule
+]{biblatex}
+
+%. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+% HYPERLINKS
+\usepackage{hyperref}	% Add hyperlinks to references, ToC and URLs
+\hypersetup{
+	colorlinks	= true,		% true: colored links; false: boxed links
+	linkcolor	= NavyBlue,	% Internal links
+	citecolor	= NavyBlue,
+	urlcolor	= NavyBlue,
+	breaklinks	= true,
+	pdfborder	= {0 0 0}
+}
+
+%. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+% MICRO-TYPOGRAPHY
+\usepackage{microtype}		% Enhance micro-typography (e.g.: protrusion, expansion)
+				% Loaded last for best compatibility with other packages
