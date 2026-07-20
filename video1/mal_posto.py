@@ -3,25 +3,27 @@ from manim import *
 class mal_posto(Scene):
     def construct(self):
 
-       ## customizar a fonte do texto
+       ## Customizar a fonte do texto.
        #Tex.set_default(    tex_template = TexFontTemplates.palatino)
        #MathTex.set_default(tex_template = TexFontTemplates.palatino)
 
     
         # --- DESENHAR SISTEMA BEM POSTO ---
         linha1 = FunctionGraph(
-                lambda x: -3 * x,
+                lambda x: 0,
                 color        = BLUE,
                 stroke_width = 6,
         ).set_z_index(1)
         self.play(Create(linha1))
 
         linha2 = FunctionGraph(
-                lambda x: (1/3) * x,
+                lambda x: 8 * x,
+                x_range      = [-0.6,0.6],  # Limita desenho à área visível.
                 color        = GREEN,
                 stroke_width = 6,
         ).set_z_index(1)
         self.play(Create(linha2))
+        linha2.scale(4) # Silenciosamente aumenta a reta para a subsequente rotação.
 
         solucao = Dot(color=PURPLE, radius=0.17).set_z_index(2)
         self.play(Create(solucao))
@@ -42,8 +44,8 @@ class mal_posto(Scene):
                 )
         )
 
-        pert = RIGHT
-        ancora = np.array([-1.,3.,0.])  # ponto da linha1 no topo da tela
+        pert = DOWN
+        ancora = np.array([5.,0.,0.])
         pert_flecha = Arrow(
                 ancora,
                 ancora + pert,
@@ -57,6 +59,7 @@ class mal_posto(Scene):
 
         erro = Arrow(
                 stroke_width = 6.5,
+                max_stroke_width_to_length_ratio = 7,
                 color        = RED,
         ).set_z_index(3)
         erro.add_updater(
