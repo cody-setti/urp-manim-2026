@@ -13,7 +13,8 @@ class mal_posto(Scene):
                 lambda x: 0,
                 color        = BLUE,
                 stroke_width = 6,
-        ).set_z_index(1)
+                z_index      = 1,
+        )
         self.play(Create(linha1))
 
         linha2 = FunctionGraph(
@@ -21,18 +22,19 @@ class mal_posto(Scene):
                 x_range      = [-0.6,0.6],  # Limita desenho à área visível.
                 color        = GREEN,
                 stroke_width = 6,
-        ).set_z_index(1)
+                z_index      = 1,
+        )
         self.play(Create(linha2))
         linha2.scale(4) # Silenciosamente aumenta a reta para a subsequente rotação.
 
-        solucao = Dot(color=PURPLE, radius=0.17).set_z_index(2)
+        solucao = Dot(color=PURPLE, radius=0.17, z_index=2)
         self.play(Create(solucao))
         self.wait(0.5)
 
 
         # --- PERTURBAR SISTEMA ---
-        linha1_ref = linha1.copy().set_opacity(0.3).set_z_index(1)
-        solucao_ref = solucao.copy().set_opacity(0.5).set_z_index(2)
+        linha1_ref = linha1.copy().set_opacity(0.3)
+        solucao_ref = solucao.copy().set_opacity(0.5)
         self.add(linha1_ref, solucao_ref)
 
         solucao.add_updater(
@@ -49,9 +51,10 @@ class mal_posto(Scene):
         pert_flecha = Arrow(
                 ancora,
                 ancora + pert,
-                buff = 0.0,
-                color = YELLOW,
-        ).set_z_index(-1)
+                buff    = 0.0,
+                color   = YELLOW,
+                z_index = -1,
+        )
         self.play(
                 linha1.animate.shift(pert),
                 GrowArrow(pert_flecha),
@@ -61,7 +64,8 @@ class mal_posto(Scene):
                 stroke_width = 6.5,
                 max_stroke_width_to_length_ratio = 7,
                 color        = RED,
-        ).set_z_index(3)
+                z_index      = 3,
+        )
         erro.add_updater(
                 lambda line: line.put_start_and_end_on(ORIGIN,solucao.get_center())
         )
