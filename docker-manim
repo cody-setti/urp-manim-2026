@@ -1,0 +1,22 @@
+#!/bin/bash
+# docker-manim - Render Manim code in a Docker container with GPU-acceleration
+
+# Initialize an empty variable for the GPU flags.
+GPU_FLAGS=""
+
+# Hardware Detection.
+if which nvidia-smi &> /dev/null; then
+    # If the NVIDIA smi (System Management Interface) is found, assume NVIDIA.
+    GPU_FLAGS="--gpus all"
+elif [ -e /dev/dri ]; then
+    # If the dri (Direct Rendering Infrastructure) directory exists, assume Intel/AMD.
+    GPU_FLAGS="--device /dev/dri"
+fi
+
+# Render animation.
+# Note that $GPU_FLAGS is left unquoted so bash evaluates it as separate arguments.
+docker run --interactive --tty --rm \
+    $GPU_FLAGS \
+    --volume "$(pwd):/manim" \
+    manimcommunity/manim:stable \
+    manim --renderer=opengl --write_to_movie "$@"
