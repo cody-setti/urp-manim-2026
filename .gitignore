@@ -1,5 +1,7 @@
 build/
 
+# Docker container mounting
+.config/
 .cache/
 __pycache__/
 *.pyc
