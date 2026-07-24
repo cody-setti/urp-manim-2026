@@ -1,3 +1,11 @@
 build/
+
+.cache/
+__pycache__/
+*.pyc
+
+# Don't track your PII, dummy!
 internal/
+
+# Manim's standard output directory
 media/
