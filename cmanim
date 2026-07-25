@@ -23,8 +23,8 @@ elif [ -e /dev/dri ]; then
 	GPU_FLAGS=(
 		"--device" "/dev/dri"
 		# Ensure the container user has permission to use hardware acceleration.
-		"--group-add" "video"
-		"--group-add" "render"
+		"--group-add" "$(getent group video  | cut --delimiter=":" --fields=3)"
+		"--group-add" "$(getent group render | cut --delimiter=":" --fields=3)"
 	)
 fi
 
