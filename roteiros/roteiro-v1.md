@@ -26,13 +26,13 @@ Um problema clássico da matemática, com muitas aplicações úteis, é a resol
 Em seu caso mais simples, resolver um sistema linear é nada mais do que determinar o ponto de interseção entre duas retas, de forma sistemática.
 
 A começar, note que qualquer ponto no plano pode ser identificado por um par de números reais
-$\left[ \begin{smallmatrix} x \\\\ y \end{smallmatrix} \right]$.
+$[ x \quad y ]^\top$
 Portanto...
 
 > EXPLICAR EQUIVALÊNCIA ENTRE EQUAÇÃO ALGÉBRICA $a_1x + a_2y = b$ E RETA GEOMÉTRICA
 
 Por conseguinte, determinar o ponto de interseção destas duas retas significa encontrar o par (ou pares)
-$\left[ \begin{smallmatrix} x \\\\ y \end{smallmatrix} \right]$
+$[ x \quad y ]^\top$
 que satisfaz(em) simultaneamente as equações
 
 $$
