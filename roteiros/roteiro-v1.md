@@ -26,13 +26,13 @@ Um problema clássico da matemática, com muitas aplicações úteis, é a resol
 Em seu caso mais simples, resolver um sistema linear é nada mais do que determinar o ponto de interseção entre duas retas, de forma sistemática.
 
 A começar, note que qualquer ponto no plano pode ser identificado por um par de números reais
-$\left[ \begin{smallmatrix} x \\ y \end{smallmatrix} \right]$.
+$\left[ \begin{smallmatrix} x \\\\ y \end{smallmatrix} \right]$.
 Portanto...
 
 > EXPLICAR EQUIVALÊNCIA ENTRE EQUAÇÃO ALGÉBRICA $a_1x + a_2y = b$ E RETA GEOMÉTRICA
 
 Por conseguinte, determinar o ponto de interseção destas duas retas significa encontrar o par (ou pares)
-$\left[ \begin{smallmatrix} x \\ y \end{smallmatrix} \right]$
+$\left[ \begin{smallmatrix} x \\\\ y \end{smallmatrix} \right]$
 que satisfaz(em) simultaneamente as equações
 
 $$
@@ -138,13 +138,17 @@ Mas, como tomamos posse desse número, exatamente? Que conta fazemos para comput
 Formalmente, temos que
 
 $$
-    \kappa \coloneqq \| A \| \cdot \| A^{-1}\|
+    \kappa
+    \coloneqq
+    \lVert A \rVert \cdot \lVert A^{-1}\rVert
 $$
 
 Aqui, os delimitadores de duplo traço indicam as **normas** das matrizes $A$ e $A^{-1}$. Para vetores de $\mathbb{R}^n$, a definição de norma é direta. Temos que (assumindo-se a métrica euclidiana)
 
 $$
-    \| \mathbf{x} \|_2 \coloneqq \sqrt{x_1^2 + x_2^2 + \ldots + x_n^2}
+    \lVert \mathbf{x} \rVert_2
+    \coloneqq
+    \sqrt{x_1^2 + x_2^2 + \ldots + x_n^2}
 $$
 
 Para matrizes, a definição é um pouco mais sutil...
