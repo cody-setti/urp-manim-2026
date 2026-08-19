@@ -26,35 +26,24 @@ Um problema clássico da matemática, com muitas aplicações úteis, é a resol
 Em seu caso mais simples, resolver um sistema linear é nada mais do que determinar o ponto de interseção entre duas retas, de forma sistemática.
 
 A começar, note que qualquer ponto no plano pode ser identificado por um par de números reais
-$
-    \left[
-        \begin{smallmatrix}
-            x \\
-            y
-        \end{smallmatrix}
-    \right]
-$
-. Portanto...
+$\left[ \begin{smallmatrix} x \\ y \end{smallmatrix} \right]$.
+Portanto...
 
 > EXPLICAR EQUIVALÊNCIA ENTRE EQUAÇÃO ALGÉBRICA $a_1x + a_2y = b$ E RETA GEOMÉTRICA
 
 Por conseguinte, determinar o ponto de interseção destas duas retas significa encontrar o par (ou pares)
-$
-    \left[
-        \begin{smallmatrix}
-            x \\
-            y
-        \end{smallmatrix}
-    \right]
-$
+$\left[ \begin{smallmatrix} x \\ y \end{smallmatrix} \right]$
 que satisfaz(em) simultaneamente as equações
+
 $$
     \begin{cases}
         a_{11}x + a_{12}y = b_1 \\
         a_{21}x + a_{22}y = b_2
     \end{cases}.
 $$
+
 Ou, expresso em notação matricial,
+
 $$
     \begin{bmatrix}
         a_{11} & a_{12} \\
@@ -70,10 +59,8 @@ $$
         b_2
     \end{bmatrix}.
 $$
-Ou finalmente, de forma ainda mais enxuta,
-$
-    A\mathbf{x} = \mathbf{b}.
-$
+
+Ou finalmente, de forma ainda mais enxuta, $A\mathbf{x} = \mathbf{b}$.
 
 Para de fato resolver o sistema linear, há uma gama ampla de estratégias que poderíamos adotar.
 * Poderíamos isolar uma das incógnitas na equação de cima e substituir na de baixo, por exemplo;
@@ -100,6 +87,7 @@ Naturalmente, sistemas lineares se estendem para o caso tridimensional também. 
 > EXPLICAR EQUIVALÊNCIA ENTRE EQUAÇÃO ALGÉBRICA $a_1x + a_2y + a_3z = b$ E PLANO GEOMÉTRICO
 
 ...o que nos leva ao equacionamento
+
 $$
     \begin{cases}
         a_{11}x + a_{12}y + a_{13}z = b_1 \\
@@ -107,7 +95,9 @@ $$
         a_{31}x + a_{32}y + a_{33}z = b_3
     \end{cases}.
 $$
+
 Ou, expresso em notação matricial,
+
 $$
     \begin{bmatrix}
         a_{11} & a_{12} & a_{13} \\
@@ -126,10 +116,8 @@ $$
         b_3
     \end{bmatrix}.
 $$
-Ou finalmente, a forma mais enxuta coincide com a bidimensional,
-$
-    A\mathbf{x} = \mathbf{b}.
-$
+
+Ou finalmente, a forma mais enxuta coincide com a bidimensional, $A\mathbf{x} = \mathbf{b}$.
 
 ## CONDICIONAMENTO DE SISTEMAS TRIDIMENSIONAIS
 Agora, da perspectiva geométrica, observamos que o sistema é bem condicionado se os planos são próximos de ortogonais, ao passo que, quanto mais próximos de paralelos, pior fica.
@@ -148,13 +136,17 @@ Se $\kappa$ for pequeno, indica bom condicionamento e, se grande, mau condiciona
 Mas, como tomamos posse desse número, exatamente? Que conta fazemos para computá-lo?
 
 Formalmente, temos que
+
 $$
     \kappa \coloneqq \| A \| \cdot \| A^{-1}\|
 $$
+
 Aqui, os delimitadores de duplo traço indicam as **normas** das matrizes $A$ e $A^{-1}$. Para vetores de $\mathbb{R}^n$, a definição de norma é direta. Temos que (assumindo-se a métrica euclidiana)
+
 $$
     \| \mathbf{x} \|_2 \coloneqq \sqrt{x_1^2 + x_2^2 + \ldots + x_n^2}
 $$
+
 Para matrizes, a definição é um pouco mais sutil...
 > EXPLICAR NORMA EUCLIDIANA DE MATRIZ ALIADO AS ANIMAÇÕES:
 
