@@ -13,19 +13,30 @@ GPU_FLAGS=()
 
 # NVIDIA requires the Container Toolkit to inject its proprietary user-space libraries (compute, graphics, etc).
 if command -v nvidia-smi &> /dev/null; then
-	GPU_FLAGS=(
-		"--gpus" "all"
-		# Force the nvidia-container-runtime to mout display and EGL libraries for the GUI.
-		"--env" "NVIDIA_DRIVER_CAPABILITIES=graphics,display,utility"
-	)
-# Open-source drivers work natively simply by passing the hardware device node.
-elif [ -e /dev/dri ]; then
-	GPU_FLAGS=(
-		"--device" "/dev/dri"
-		# Ensure the container user has permission to use hardware acceleration.
-		"--group-add" "$(getent group video  | cut --delimiter=":" --fields=3)"
-		"--group-add" "$(getent group render | cut --delimiter=":" --fields=3)"
-	)
+    GPU_FLAGS+=(
+        "--gpus" "all"
+        # Force the nvidia-container-runtime to mout display and EGL libraries for the GUI.
+        "--env" "NVIDIA_VISIBLE_DEVICES=all"
+        "--env" "NVIDIA_DRIVER_CAPABILITIES=all"
+    )
+fi
+
+# Pass the hardware (i.e.: GPU) device node.
+if [ -e /dev/dri ]; then
+    GPU_FLAGS+=("--device" "/dev/dri")
+
+    # Inject host group IDs for video permissions if they exist.
+    if getent group video &> /dev/null; then
+        GPU_FLAGS+=(
+            "--group-add" "$(getent group video  | cut --delimiter=":" --fields=3)"
+        )
+    fi
+    # Inject host group IDs for render permissions if they exist.
+    if getent group render &> /dev/null; then
+        GPU_FLAGS+=(
+            "--group-add" "$(getent group render | cut --delimiter=":" --fields=3)"
+        )
+    fi
 fi
 
 
@@ -35,66 +46,67 @@ GUI_FLAGS=()
 
 # X11 (and Xwayland) binding.
 if [ -n "${DISPLAY:-}" ]; then
-	GUI_FLAGS+=(
-		# Duplicate the host's DISPLAY environment variable inside the container.
-		--env "DISPLAY=${DISPLAY}"
-		# Punch a hole in the container! Share the host's display sockets.
-		--volume "/tmp/.X11-unix:/tmp/.X11-unix:rw"
-		# Share host's IPC namespace for shared memory high-performance rendering in X11.
-		--ipc=host
-	)
-	# Handle container's X11 authentication.
-	if [ -f "${XAUTHORITY:-}" ]; then
-		GUI_FLAGS+=(
-			--env "XAUTHORITY=${XAUTHORITY}"
-			# Punch a hole in the container! Share the host's security file with the container.
-			--volume "${XAUTHORITY}:${XAUTHORITY}:ro"
-		)
-	# Fallback file name for the X11 security badge.
-	elif [ -f "${HOME}/.Xauthority" ]; then
-		GUI_FLAGS+=(
-			--env "XAUTHORITY=$HOME/.Xauthority"
-			# Punch a hole in the container! Share the host's security file with the container.
-			--volume "$HOME/.Xauthority:$HOME/.Xauthority:ro"
-		)
-	fi
+    GUI_FLAGS+=(
+        # Duplicate the host's DISPLAY environment variable inside the container.
+        --env "DISPLAY=${DISPLAY}"
+        # Punch a hole in the container! Share the host's display sockets.
+        --volume "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+        # Share host's IPC namespace for shared memory high-performance rendering in X11.
+        --ipc=host
+    )
+    # Handle container's X11 authentication.
+    if [ -f "${XAUTHORITY:-}" ]; then
+        GUI_FLAGS+=(
+            --env "XAUTHORITY=${XAUTHORITY}"
+            # Punch a hole in the container! Share the host's security file with the container.
+            --volume "${XAUTHORITY}:${XAUTHORITY}:ro"
+        )
+    # Fallback file name for the X11 security badge.
+    elif [ -f "${HOME}/.Xauthority" ]; then
+        GUI_FLAGS+=(
+            --env "XAUTHORITY=$HOME/.Xauthority"
+            # Punch a hole in the container! Share the host's security file with the container.
+            --volume "$HOME/.Xauthority:$HOME/.Xauthority:ro"
+        )
+    fi
 fi
 
 # Wayland binding.
 if [ -n "${WAYLAND_DISPLAY:-}" ] && [ -n "${XDG_RUNTIME_DIR:-}" ]; then
-	GUI_FLAGS+=(
-		# Duplicate the host's Wayland environment variables inside the container.
-		--env "WAYLAND_DISPLAY=${WAYLAND_DISPLAY}"
-		--env "XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR}"
-		# Punch a hole in the container! Share the host's display socket.
-		--volume "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}:${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}:rw"
-	)
+    GUI_FLAGS+=(
+        # Duplicate the host's Wayland environment variables inside the container.
+        --env "WAYLAND_DISPLAY=${WAYLAND_DISPLAY}"
+        --env "XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR}"
+        # Punch a hole in the container!
+        # Mount the entire runtime directory (not just display socket) so Wayland can allocate shared memory buffers.
+        --volume "${XDG_RUNTIME_DIR}:${XDG_RUNTIME_DIR}:rw"
+    )
 fi
 
 
 
 # --- DOCKER RUN ---
 DOCKER_ARGS=(
-	run --interactive --tty --rm
+    run --interactive --tty --rm
 
-	# Override the container's hardcoded UID 1000 with the host's UID/GID.
-	--user "$(id --user):$(id --group)"
+    # Override the container's hardcoded UID 1000 with the host's UID/GID.
+    --user "$(id --user):$(id --group)"
 
-	# Inject detected flags.
-	"${GPU_FLAGS[@]}"
-	"${GUI_FLAGS[@]}"
+    # Inject detected flags.
+    "${GPU_FLAGS[@]}"
+    "${GUI_FLAGS[@]}"
 
-	# Punch a hole in the container! Mount the current directory.
-	--volume "$(pwd):/workspace"
+    # Punch a hole in the container! Mount the current directory.
+    --volume "$(pwd):/workspace"
 
-	# Set the directory mounted to the host as the containers default work directory.
-	--workdir "/workspace"
+    # Set the directory mounted to the host as the containers default work directory.
+    --workdir "/workspace"
 
-	# Target the custom image.
-	manim-sandbox
+    # Target the custom image.
+    manim-sandbox
 
-	# Evaluate user arguments: execute them if provided, otherwise default to an interactive shell session.
-    	"${@:-/bin/bash}"
+    # Evaluate user arguments: execute them if provided, otherwise default to an interactive shell session.
+        "${@:-/bin/bash}"
 )
 
 # Render animation.
