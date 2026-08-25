@@ -1,0 +1,26 @@
+\documentclass[preview]{standalone}
+% Required by Manim: crops the output PDF to the exact size of the equation/text so Manim can map it to SVG correctly.
+
+\usepackage[brazilian]{babel}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{fontspec}
+\usepackage[
+	math-style = ISO,
+	bold-style = ISO,
+]{unicode-math}
+\setmainfont{LibertinusSerif-Regular.otf}[
+	Path           = /workspace/fonts/libertinus/,
+	BoldFont       = LibertinusSerif-Bold.otf,
+	ItalicFont     = LibertinusSerif-Italic.otf,
+	BoldItalicFont = LibertinusSerif-BoldItalic.otf
+]
+\setmathfont{LibertinusMath-Regular.otf}[
+	Path           = /workspace/fonts/libertinus/
+]
+\usepackage{microtype}
+
+\begin{document}
+	% Manim's internal hook: the Python engine dynamically replaces this exact string with your Tex() or MathTex() input.
+	YourTextHere
+\end{document}
