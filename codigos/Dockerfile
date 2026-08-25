@@ -1,3 +1,7 @@
+# BUILD manim-sandbox
+# > A Docker image meant for rendering and displaying Manim code utilizing GPU acceleration
+# > regardless of display protocol (X11 or Wayland) and the host machine's GPU make.
+
 # Use ManimCE's (latest stable) official manim image as a base.
 FROM manimcommunity/manim:stable
 

@@ -1,5 +1,7 @@
 #!/bin/bash
-# cmanim - Run a Docker container to render Manim code live, leveraging GPU-acceleration.
+# cmanim (container manim):
+# > Run a Docker container to render and display Manim code live, leveraging GPU acceleration,
+# > regardless of display protocol (X11 or Wayland) or the host machine's specific GPU make.
 
 # Unofficial Bash strict mode: fail fast on errors, unset variables, and pipeline failures.
 set -o errexit
