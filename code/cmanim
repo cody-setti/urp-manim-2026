@@ -9,38 +9,32 @@ set -o nounset
 set -o pipefail
 
 
-
 # --- BIND RENDER DEVICES ---
 GPU_FLAGS=()
 
 # NVIDIA requires the Container Toolkit to inject its proprietary user-space libraries (compute, graphics, etc).
 if command -v nvidia-smi &> /dev/null; then
     GPU_FLAGS+=(
-        "--gpus" "all"
-        # Force the nvidia-container-runtime to mout display and EGL libraries for the GUI.
-        "--env" "NVIDIA_VISIBLE_DEVICES=all"
-        "--env" "NVIDIA_DRIVER_CAPABILITIES=all"
+        --gpus all
+        # Force the nvidia-container-runtime to mount display and EGL libraries for the GUI.
+        --env "NVIDIA_VISIBLE_DEVICES=all"
+        --env "NVIDIA_DRIVER_CAPABILITIES=all"
     )
 fi
 
 # Pass the hardware (i.e.: GPU) device node.
 if [ -e /dev/dri ]; then
-    GPU_FLAGS+=("--device" "/dev/dri")
+    GPU_FLAGS+=(--device /dev/dri)
 
     # Inject host group IDs for video permissions if they exist.
     if getent group video &> /dev/null; then
-        GPU_FLAGS+=(
-            "--group-add" "$(getent group video  | cut --delimiter=":" --fields=3)"
-        )
+        GPU_FLAGS+=(--group-add "$(getent group video  | cut --delimiter=":" --fields=3)")
     fi
     # Inject host group IDs for render permissions if they exist.
     if getent group render &> /dev/null; then
-        GPU_FLAGS+=(
-            "--group-add" "$(getent group render | cut --delimiter=":" --fields=3)"
-        )
+        GPU_FLAGS+=(--group-add "$(getent group render | cut --delimiter=":" --fields=3)")
     fi
 fi
-
 
 
 # --- BIND DISPLAY SOCKETS ---
@@ -56,19 +50,17 @@ if [ -n "${DISPLAY:-}" ]; then
         # Share host's IPC namespace for shared memory high-performance rendering in X11.
         --ipc=host
     )
-    # Handle container's X11 authentication.
+    # Handle container's X11 authentication by sharing the host's security file.
     if [ -f "${XAUTHORITY:-}" ]; then
         GUI_FLAGS+=(
             --env "XAUTHORITY=${XAUTHORITY}"
-            # Punch a hole in the container! Share the host's security file with the container.
             --volume "${XAUTHORITY}:${XAUTHORITY}:ro"
         )
     # Fallback file name for the X11 security badge.
     elif [ -f "${HOME}/.Xauthority" ]; then
         GUI_FLAGS+=(
-            --env "XAUTHORITY=$HOME/.Xauthority"
-            # Punch a hole in the container! Share the host's security file with the container.
-            --volume "$HOME/.Xauthority:$HOME/.Xauthority:ro"
+            --env "XAUTHORITY=${HOME}/.Xauthority"
+            --volume "${HOME}/.Xauthority:${HOME}/.Xauthority:ro"
         )
     fi
 fi
@@ -79,17 +71,31 @@ if [ -n "${WAYLAND_DISPLAY:-}" ] && [ -n "${XDG_RUNTIME_DIR:-}" ]; then
         # Duplicate the host's Wayland environment variables inside the container.
         --env "WAYLAND_DISPLAY=${WAYLAND_DISPLAY}"
         --env "XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR}"
-        # Punch a hole in the container!
-        # Mount the entire runtime directory (not just display socket) so Wayland can allocate shared memory buffers.
+        # Mount the entire runtime directory (not just the display socket) so Wayland
+        # can allocate shared memory buffers.
         --volume "${XDG_RUNTIME_DIR}:${XDG_RUNTIME_DIR}:rw"
     )
 fi
 
 
-
 # --- DOCKER RUN ---
+# Only ask for a TTY when we actually have one: `docker run --tty` aborts with
+# "the input device is not a TTY" when this wrapper is driven by a script or CI runner.
+TTY_FLAGS=()
+if [ -t 0 ]; then
+    TTY_FLAGS+=(--tty)
+fi
+
+# Default to an interactive shell when invoked with no command.
+if [ "$#" -eq 0 ]; then
+    set -- /bin/bash
+fi
+
 DOCKER_ARGS=(
-    run --interactive --tty --rm
+    run --interactive --rm
+
+    # Inject the TTY flag only for interactive sessions.
+    "${TTY_FLAGS[@]}"
 
     # Override the container's hardcoded UID 1000 with the host's UID/GID.
     --user "$(id --user):$(id --group)"
@@ -98,17 +104,14 @@ DOCKER_ARGS=(
     "${GPU_FLAGS[@]}"
     "${GUI_FLAGS[@]}"
 
-    # Punch a hole in the container! Mount the current directory.
+    # Mount the current directory and make it the container's working directory.
     --volume "$(pwd):/workspace"
-
-    # Set the directory mounted to the host as the containers default work directory.
     --workdir "/workspace"
 
     # Target the custom image.
     manim-sandbox
 
-    # Evaluate user arguments: execute them if provided, otherwise default to an interactive shell session.
-        "${@:-/bin/bash}"
+    "$@"
 )
 
 # Render animation.
