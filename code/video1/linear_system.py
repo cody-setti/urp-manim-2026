@@ -10,7 +10,7 @@ class LinearSystem(Scene):
                 "color": "#ACACAC",
             }                               ,
             background_line_style = {
-                "stroke_color": "#BDBDBD",
+                "stroke_color": "#CFCFCF",
             }                               ,
         )
         self.add(cartesian_plane)
@@ -19,8 +19,8 @@ class LinearSystem(Scene):
         # Show that a two-variable linear equation is
         # equivalent to a geometrical 2D line.
 
-        # x + 2y = 0.
-        a11, a12, b1 = 1.0, 2.0, 0.0
+        # x + 2y = -3.
+        a11, a12, b1 = 1.0, 2.0, -3.0
         a11v         = ValueTracker(a11)
         a12v         = ValueTracker(a12)
         b1v          = ValueTracker(b1)
@@ -37,7 +37,9 @@ class LinearSystem(Scene):
 
         equation1 = always_redraw(
             lambda: MathTex(
-                f"{a11v.get_value():.1f}x {a12v.get_value():+.1f}y = {b1v.get_value():.1f}",
+                rf"{a11v.get_value():.1f}x {a12v.get_value():+.1f}y = "
+                + (r"\phantom{-}" if b1v.get_value() >= 0.0 else "")
+                + rf"{b1v.get_value():.1f}",
                 color = color1,
             ).to_corner(UR)
         )
@@ -47,9 +49,9 @@ class LinearSystem(Scene):
         self.wait(0.5)
 
         # Play around with b1.
-        self.play(b1v.animate.set_value( 5.0), run_time=2)
-        self.play(b1v.animate.set_value(-4.0), run_time=2)
-        self.play(b1v.animate.set_value( 0.0), run_time=1)
+        self.play(b1v.animate.set_value( 5.0), run_time=2  )
+        self.play(b1v.animate.set_value(-4.0), run_time=2  )
+        self.play(b1v.animate.set_value(-3.0), run_time=0.5)
         self.wait(0.5)
 
         # Play around with a11.
@@ -85,9 +87,9 @@ class LinearSystem(Scene):
 
         equation2 = always_redraw(
             lambda: MathTex(
-                f"{a21v.get_value():.1f}x {a22v.get_value():+.1f}y = {b2v.get_value():.1f}",
+                rf"{a21v.get_value():.1f}x {a22v.get_value():+.1f}y = \phantom{{-}}{b2v.get_value():.1f}",
                 color = color2,
-            ).next_to(equation1,DOWN)
+            ).next_to(equation1,DOWN, aligned_edge=RIGHT)
         )
 
         # Draw the second line and equation.
@@ -122,11 +124,12 @@ class LinearSystem(Scene):
         self.wait(0.5)
 
         algebraic_system = MathTex(
-            r"\begin{cases} ",                                         # 0
-            rf"\phantom{{-}}{a11:.0f}x {a12:+.0f}y &= {b1:.0f} \\\\ ", # 1
-            f"{a21:.0f}x {a22:+.0f}y &= {b2:.0f} ",                    # 2
-            r"\end{cases}",                                            # 3
-            color = "#000000",
+            r"\begin{cases}"                                        ,  # 0
+            rf"  \phantom{{-}}{a11:.0f}x {a12:+.0f}y &= {b1:.0f} \\",  # 1
+            rf"  {a21:.0f}x {a22:+.0f}y &= \phantom{{-}}{b2:.0f} "  ,  # 2
+            r"\end{cases}"                                          ,  # 3
+            
+            color = "#000000"                                     ,
         ).scale(1.5)
 
         # Apply the corresponding colors to each equation string
@@ -139,22 +142,22 @@ class LinearSystem(Scene):
 
         # --- TRANSITION TO MATRIX NOTATION ---
         matrix_system = MathTex(
-            r"\begin{bmatrix} ",       # 0
-            rf"\phantom{{-}}{a11:.0f}",# 1
-            r" & ",                    # 2
-            f"{a12:.0f}",              # 3
-            r" \\ ",                   # 4
-            f"{a21:.0f}",              # 5
-            r" & ",                    # 6
-            f"{a22:.0f}",              # 7
-            r" \end{bmatrix}",         # 8
+            r"\begin{bmatrix} ",        # 0
+            rf"\phantom{{-}}{a11:.0f}", # 1
+            r" & ",                     # 2
+            rf"{a12:.0f}",              # 3
+            r" \\ ",                    # 4
+            f"{a21:.0f}",               # 5
+            r" & ",                     # 6
+            rf"{a22:.0f}",              # 7
+            r"\end{bmatrix}",           # 8
             r"\begin{bmatrix} x \\ y \end{bmatrix}", # 9
-            r" = ",                    # 10
-            r"\begin{bmatrix} ",       # 11
-            f"{b1:.0f}",               # 12
-            r" \\ ",                   # 13
-            f"{b2:.0f}",               # 14
-            r" \end{bmatrix}",         # 15
+            r" = ",                     # 10
+            r"\begin{bmatrix} ",        # 11
+            rf"{b1:.0f}",               # 12
+            r" \\ ",                    # 13
+            rf"\phantom{{-}}{b2:.0f}",  # 14
+            r" \end{bmatrix}",          # 15
             color = "#000000",
         ).scale(1.5)
 
@@ -170,7 +173,7 @@ class LinearSystem(Scene):
         matrix_system[14].set_color(color2)
 
         # Animate the transition by replacing the algebraic system with the matrix system
-        self.play(ReplacementTransform(algebraic_system, matrix_system), run_time=2)
+        self.play(FadeTransform(algebraic_system, matrix_system), run_time=2)
         self.wait(2)
 
         # --- TRANSITION TO SYMBOLIC MATRIX NOTATION ---
@@ -190,7 +193,7 @@ class LinearSystem(Scene):
             r"b_1",                    # 12
             r" \\ ",                   # 13
             r"b_2",                    # 14
-            r" \end{bmatrix}",         # 15
+            r"\end{bmatrix}",          # 15
             color = "#000000",
         ).scale(1.5)
 
@@ -206,7 +209,7 @@ class LinearSystem(Scene):
         symbolic_system[14].set_color(color2)
 
         # Animate the transition by replacing the matrix system with the symbolic system
-        self.play(ReplacementTransform(matrix_system, symbolic_system), run_time=2)
+        self.play(FadeTransform(matrix_system, symbolic_system), run_time=2)
         self.wait(2)
 
         # --- TRANSITION TO GENERAL m x n SYSTEM (EXPANDING ROWS/COLS) ---
@@ -241,5 +244,5 @@ class LinearSystem(Scene):
         matrix_expanded[8].set_color(color2)
         matrix_expanded[23].set_color(color2)
 
-        self.play(ReplacementTransform(symbolic_system, matrix_expanded), run_time=2.5)
+        self.play(FadeTransform(symbolic_system, matrix_expanded), run_time=2.5)
         self.wait(3)
