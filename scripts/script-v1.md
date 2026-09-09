@@ -1,36 +1,76 @@
-# VÍDEO 1 - SISTEMAS MAL POSTOS
+# VÍDEO 1 - SISTEMAS MAL CONDICIONADOS
 ## INSTALANDO-SE UMA CERCA
-A primeira etapa de se construir uma cerca é definir onde as duas estacas extremas serão instaladas e correr uma corda entre esses dois pontos. Ela servirá de guia para a instalação das cercas intermediárias.
+A primeira etapa de se construir uma cerca é definir onde os dois mourões mestres serão instalados e correr uma linha entre esses dois pontos. Ela servirá de guia para a instalação dos mourões intermediários.
 
-Se afobadamente instalarmos as estacas em série, sem antes configurar nossa guia, um pequeno desalinhamento entre as duas primeiras estacas pode causar um desvio muito grande do trajeto da cerca.
+Se afobadamente instalarmos os mourões em série, sem antes configurar nossa guia, um pequeno desalinhamento entre os dois primeiros mourões pode impedir a instalação da travessa.
 
-Crucialmente, o primeiro modo de se construir uma cerca, fixando os dois extremos primeiro, é robusto contra pequenas imprecisões de instalação, ao passo que o segundo, em que começamos por fixar as duas primeiras estacas, é muito sensível.
+Crucialmente, o primeiro modo de se construir uma cerca, fixando os dois extremos primeiro, é robusto contra pequenas imprecisões de instalação, ao passo que o segundo, em que começamos por fixar os dois primeiros mourões, é muito sensível.
 
-Nos problemas enfrentados na matemática, esses dois comportamentos emergem. Um problema com o primeiro desses comportamentos é dito **bem posto** (ou condicionado), ao passo que um com o segundo é dito **mal posto**.
+Nos problemas enfrentados nas exatas, esses dois comportamentos emergem. Um problema matemático cuja solução é pouco perturbada por imprecisões é dito **bem condicionado**, ao passo que um cuja solução muda completamente, mesmo quando os erros são pequenos, é dito **mal condicionado**.
 
 
 ## INEVITABILIDADE DOS ERROS
-É importante frisar que medições errôneas são inescapáveis. A começar, todo instrumento de medição físico possui um grau de incerteza em suas leituras, mas, mesmo se tivéssemos um maquinário perfeito, que fizesse medições exatas, os computadores possuem memória finita, e, portanto,...
+É importante frisar que em qualquer problema **real**, medições errôneas são inescapáveis.
 
-> COMENTAR _BREVEMENTE_ SOBRE REPRESENTAÇÃO DE NÚMEROS REAIS NO COMPUTADOR
+A começar, todo instrumento de medição físico possui um grau de incerteza em suas leituras.
 
-... logo, quando resolvendo um problema, seu condicionamento **sempre** será um ponto importante de consideração. Se ele for **mal** condicionado - dada a inevitabilidade dos erros - mesmo se fizermos nossos cálculos matemáticos perfeitamente, ainda é inteiramente possível que nossos resultados não sejam confiáveis!
+Mas, mesmo se tivéssemos um maquinário perfeito, que fizesse medições exatas, os computadores - os aparelhos que fazem nossas contas no contexto profissional - **sempre** cometem pequenos erros.
+
+O motivo por trás disso é simples: um número real pode ter infinitos dígitos - como $\pi$, por exemplo -, mas a memória (a quantidade de bits) que um computador aloca para guardar cada número é, obviamente, finita. Portanto, mais cedo ou tarde, o computador terá que truncá-lo.
+
+Da geometria, por exemplo, sabemos que a área de um círculo de raio de 4 cm é
+
+$$
+    \pi \cdot 4^2\;\text{cm}^2.
+$$
+
+Logo, por menor que seja, sempre cometeremos um erro calculando essa área no computador.
+
+Com isso em mente, fica claro que, quando resolvendo um problema, seu condicionamento **sempre** será um ponto importante de consideração. Se ele for **mal** condicionado - dada a inevitabilidade dos erros - mesmo se fizermos todos os cálculos devidos, ainda é inteiramente possível que nossos resultados não sejam confiáveis!
 
 
 ## SISTEMAS LINEARES
 Um problema clássico da matemática, com muitas aplicações úteis, é a resolução de sistemas lineares.
 
-> EXPLICITAR _BREVEMENTE_ ALGUMA(S) APLICAÇÃO(ÕES)
->> Claro, mencionar as aplicações tradadas no LOPI (ex.: reconstrução tomográfica)
+### ALGUMAS APLICAÇÕES
+Serve
 
-Em seu caso mais simples, resolver um sistema linear é nada mais do que determinar o ponto de interseção entre duas retas, de forma sistemática.
+1. na produção de exames de imagem no contexto médico,
+2. na determinação do carregamento de estruturas da construção civil,
+3. na animação de artefatos 3D em videogames.
 
+Dentre várias outras coisas...
+
+Em seu caso mais simples, resolver um sistema linear é nada mais do que determinar o ponto de interseção entre duas retas no plano, de forma sistemática.
+
+### PLANO CARTESIANO
 A começar, note que qualquer ponto no plano pode ser identificado por um par de números reais
 $[ x \quad y ]^\top$
-Portanto...
+Onde $x$ representa sua distância horizontal de um ponto de referência e $y$ a vertical.
 
-> EXPLICAR EQUIVALÊNCIA ENTRE EQUAÇÃO ALGÉBRICA $a_1x + a_2y = b$ E RETA GEOMÉTRICA
+Vale frisar que usamos aqui a distância **com sinal**, ou seja, se $x$ for negativo, significa que o ponto está **à esquerda** da origem, ao passo que, se $y$ for negativo, significa que o ponto está **abaixo** da origem.
 
+### 1 EQUAÇÃO LINEAR
+O emprego desses dois números $x$ e $y$ agora permite-nos estabelecer relações entre figuras geométricas e equações algébricas - a chamada *Geometria Analítica*.
+
+Por exemplo, o conjunto de todos pares $(x,y)$ tais que $x=3$ nada mais é do que uma reta vertical 3 unidades à direita de nossa origem.
+
+Que figura nos fornece a equação $y=4$? ...a reta vertical 4 unidades acima de nossa origem.
+
+Uma **equação linear**, por sua vez, é uma da forma
+$$
+    a\cdot x + b\cdot y = c.
+$$
+Por exemplo,
+$$
+    2\cdot x - 1\cdot y = 3.
+$$
+Os pares $(x,y)$ da reta que satisfazem essa equação formam uma **reta**.
+
+Se mudarmos os valores de $a$ e $b$, mudamos a angulação da reta. Se mudamos o valor de $c$, transladamo-na.
+
+
+### 2 EQUAÇÕES LINEARES
 Por conseguinte, determinar o ponto de interseção destas duas retas significa encontrar o par (ou pares)
 $[ x \quad y ]^\top$
 que satisfaz(em) simultaneamente as equações
