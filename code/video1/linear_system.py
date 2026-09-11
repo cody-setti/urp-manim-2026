@@ -1,5 +1,37 @@
 from manim import *
 
+
+def coefficient(value: float) -> str:
+    r"""`value` to one decimal place, always reserving the width of a leading '-'.
+
+    Holding the sign slot open with \phantom keeps a coefficient the same width whether it
+    is positive or negative, so the equation's LaTeX layout is identical frame to frame.
+    """
+    text = f"{value:.1f}"
+    return text if text.startswith("-") else rf"\phantom{{-}}{text}"
+
+
+def equation(a: ValueTracker, b: ValueTracker, c: ValueTracker, color: str, anchor) -> MathTex:
+    """Build "ax + by = c" from the trackers, pinned by its "y =" part to `anchor`.
+
+    always_redraw() rebuilds this mobject every frame, and every Manim positioning method
+    aligns by the *ink* bounding box, which breathes as the digits change -- a '0' fills
+    its slot while a '1' does not -- so re-aligning each frame makes the equation jiggle.
+
+    Instead "y =" is broken out as a part of its own: those two glyphs never change shape,
+    and coefficient() keeps every other glyph at a fixed LaTeX offset from them, so pinning
+    that one part alone holds every character still. Assumes the coefficients stay inside
+    (-10, 10), where no number grows a second integer digit.
+    """
+    tex = MathTex(
+        rf"{coefficient(a.get_value())}x {b.get_value():+.1f}",
+        r"y =",
+        coefficient(c.get_value()),
+        color = color,
+    )
+    return tex.shift(anchor - tex[1].get_corner(DL))
+
+
 class LinearSystem(Scene):
     def construct(self):
         cartesian_plane = NumberPlane(
@@ -19,8 +51,8 @@ class LinearSystem(Scene):
         # Show that a two-variable linear equation is
         # equivalent to a geometrical 2D line.
 
-        # x + 2y = -3.
-        a11, a12, b1 = 1.0, 2.0, -3.0
+        # x + 2y = -1.5.
+        a11, a12, b1 = 1.0, 2.0, -1.5
         a11v         = ValueTracker(a11)
         a12v         = ValueTracker(a12)
         b1v          = ValueTracker(b1)
@@ -35,13 +67,13 @@ class LinearSystem(Scene):
             )
         )
 
+        # Invisible layout frame: never added to the scene, it only fixes where this
+        # row's "y =" belongs. See equation() for why the equation cannot corner itself.
+        eq1_frame  = MathTex(r"\phantom{-}0.0x +0.0", r"y =", r"\phantom{-}0.0").to_corner(UR)
+        eq1_anchor = eq1_frame[1].get_corner(DL)
+
         equation1 = always_redraw(
-            lambda: MathTex(
-                rf"{a11v.get_value():.1f}x {a12v.get_value():+.1f}y = "
-                + (r"\phantom{-}" if b1v.get_value() >= 0.0 else "")
-                + rf"{b1v.get_value():.1f}",
-                color = color1,
-            ).to_corner(UR)
+            lambda: equation(a11v, a12v, b1v, color1, eq1_anchor)
         )
 
         # Draw the initial line and equation.
@@ -51,7 +83,7 @@ class LinearSystem(Scene):
         # Play around with b1.
         self.play(b1v.animate.set_value( 5.0), run_time=2  )
         self.play(b1v.animate.set_value(-4.0), run_time=2  )
-        self.play(b1v.animate.set_value(-3.0), run_time=0.5)
+        self.play(b1v.animate.set_value(-1.5), run_time=0.5)
         self.wait(0.5)
 
         # Play around with a11.
@@ -85,11 +117,12 @@ class LinearSystem(Scene):
             )
         )
 
+        # Same frame as the first equation, one line lower.
+        eq2_frame  = eq1_frame.copy().next_to(eq1_frame, DOWN)
+        eq2_anchor = eq2_frame[1].get_corner(DL)
+
         equation2 = always_redraw(
-            lambda: MathTex(
-                rf"{a21v.get_value():.1f}x {a22v.get_value():+.1f}y = \phantom{{-}}{b2v.get_value():.1f}",
-                color = color2,
-            ).next_to(equation1,DOWN, aligned_edge=RIGHT)
+            lambda: equation(a21v, a22v, b2v, color2, eq2_anchor)
         )
 
         # Draw the second line and equation.
