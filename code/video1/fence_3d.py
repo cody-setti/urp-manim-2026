@@ -39,7 +39,7 @@ def make_rail(height: float) -> Cube:
     return rail.shift(OUT * height + DOWN * RAIL_OFFSET)
 
 
-class Fence(ThreeDScene):
+class Fence3D(ThreeDScene):
     """Raises a two-post fence, for the opening 'installing a fence' analogy."""
 
     def construct(self):
