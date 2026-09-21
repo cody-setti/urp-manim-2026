@@ -106,7 +106,7 @@ class FenceFrontView(Scene):
         self.play(rails[1].animate.set_opacity(RAIL_DIM), run_time=1)
         
         # --- SCREW TO THE FIRST TWO POSTS ---
-        screws = VGroup(screw(posts[0]), screw(posts[1]))
+        screws = VGroup(screw(posts[0]), screw(posts[4]))
         
         top_rail.add_updater(lambda m: m.become(screwed_rail(screws, base_length)))
         
@@ -118,18 +118,13 @@ class FenceFrontView(Scene):
         )
         self.wait(1.5)
         
-        # --- SHIFT THE PINNING POINT ON THE SECOND POST ---
+        # --- SHIFT THE PINNING POINT ON THE LAST POST ---
         self.play(screws[1].animate.shift(UP * SCREW_NUDGE), run_time=2)
         self.wait(1.5)
 
-        # --- SLIDE THAT PINNING POINT OUT TO THE LAST POST ---
-        self.play(screws[1].animate.shift(DOWN * SCREW_NUDGE), run_time=1)
+        # --- SLIDE THAT PINNING POINT IN TO THE SECOND POST ---
         self.play(
-            screws[1].animate.move_to(posts[-1].get_center() + UP * SCREW_RISE),
+            screws[1].animate.set_x(posts[1].get_x()),
             run_time = 1.5,
         )
-        self.wait(0.5)
-
-        # --- THE SAME ERROR, NOW FOUR POSTS' WORTH OF LEVER AWAY ---
-        self.play(screws[1].animate.shift(UP * SCREW_NUDGE), run_time=2)
         self.wait(2)
