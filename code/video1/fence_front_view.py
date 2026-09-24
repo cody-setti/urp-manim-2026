@@ -105,7 +105,7 @@ class FenceFrontView(Scene):
         # ---                            ---
         self.play(rails[1].animate.set_opacity(RAIL_DIM), run_time=1)
         
-        # --- SCREW TO THE FIRST TWO POSTS ---
+        # --- SCREW TO THE END POSTS ---
         screws = VGroup(screw(posts[0]), screw(posts[4]))
         
         top_rail.add_updater(lambda m: m.become(screwed_rail(screws, base_length)))
@@ -121,10 +121,13 @@ class FenceFrontView(Scene):
         # --- SHIFT THE PINNING POINT ON THE LAST POST ---
         self.play(screws[1].animate.shift(UP * SCREW_NUDGE), run_time=2)
         self.wait(1.5)
-
+        
         # --- SLIDE THAT PINNING POINT IN TO THE SECOND POST ---
-        self.play(
-            screws[1].animate.set_x(posts[1].get_x()),
-            run_time = 1.5,
-        )
+        self.play( screws[1].animate.set_x(posts[3].get_x()) )
+        self.wait(2)
+        
+        self.play( screws[1].animate.set_x(posts[2].get_x()) )
+        self.wait(2)
+        
+        self.play( screws[1].animate.set_x(posts[1].get_x()) )
         self.wait(2)
