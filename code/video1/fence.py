@@ -181,7 +181,7 @@ class FenceMath(Scene):
         self.play(Create(ax), Write(ax_labels), run_time=2)
         
         # --- INTERPRET RAIL AS A LINE ---
-        LINE_COLOR = "#938AFF"
+        LINE_COLOR = "#6E61FF"
         line = always_redraw(
             lambda:
             Line(
@@ -248,15 +248,16 @@ class FenceMath(Scene):
         screw1_eq[2].set_color( LINE_COLOR)  # 2 -> a 
         screw1_eq[5].set_color( LINE_COLOR)  # 5 -> b 
         label1    =     Tex(r"1$^\text{o}$ parafuso:", color="#000000").next_to(screw1_eq, LEFT)
-        self.play( 
-            posts[1] .animate.set_opacity(0.5),
-            screws[1].animate.set_opacity(0.5),
-            arrow_y2 .animate.set_opacity(0.5),
-            y2_eq    .animate.set_opacity(0.5),
-            Write(label1)                     ,
-            *(
-                ReplacementTransform(src, dst) for src, dst in zip(line_eq, screw1_eq)
-            )                                 ,
+        
+        # No frame is drawn before `play`, whose 1st frame shows `screw1_eq` shaped as `line_eq`.
+        self.remove(line_eq)
+        self.play(
+            posts[1] .animate.set_opacity(0.5)  ,
+            screws[1].animate.set_opacity(0.5)  ,
+            arrow_y2 .animate.set_opacity(0.5)  ,
+            y2_eq    .animate.set_opacity(0.5)  ,
+            Write(label1)                       ,
+            TransformFromCopy(line_eq, screw1_eq),
         )
         self.wait(2)
         
@@ -280,7 +281,7 @@ class FenceMath(Scene):
         self.wait(0.5)
         
         screw2_eq = MathTex("y_2", "=", "a", r"\,d", "+", "b", color="#000000").next_to(screw1_eq, DOWN)
-        screw2_eq[0].set_color(ERROR_COLOR)  # 0 -> y1
+        screw2_eq[0].set_color(ERROR_COLOR)  # 0 -> y2
         screw2_eq[2].set_color( LINE_COLOR)  # 2 -> a 
         screw2_eq[5].set_color( LINE_COLOR)  # 5 -> b 
         label2    =     Tex(r"2$^\text{o}$ parafuso:", color="#000000").next_to(screw2_eq, LEFT)
@@ -295,23 +296,25 @@ class FenceMath(Scene):
         self.wait(2)
         
         # --- SWAP EQUATION TERMS ---
-        # [y, =, a, x, +, b] -> [x, a, +, b, =, y]: old part i lands on new part SWAP[i].
-        SWAP = [5, 4, 1, 0, 2, 3]
+        swap1_eq = MathTex("0", "a", "+", "b", "=", "y_1", color="#000000").next_to(label1, RIGHT)
+        swap1_eq[5].set_color(ERROR_COLOR)  # 5 -> y1
+        swap1_eq[1].set_color( LINE_COLOR)  # 1 -> a
+        swap1_eq[3].set_color( LINE_COLOR)  # 3 -> b
         
-        screw1_swap = MathTex("0", "a", "+", "b", "=", "y_1", color="#000000").next_to(label1, RIGHT)
-        screw1_swap[5].set_color(ERROR_COLOR)  # 5 -> y1
-        screw1_swap[1].set_color( LINE_COLOR)  # 1 -> a
-        screw1_swap[3].set_color( LINE_COLOR)  # 3 -> b
+        swap2_eq = MathTex("d", "a", "+", "b", "=", "y_2", color="#000000").next_to(label2, RIGHT)
+        swap2_eq[5].set_color(ERROR_COLOR)  # 5 -> y2
+        swap2_eq[1].set_color( LINE_COLOR)  # 1 -> a
+        swap2_eq[3].set_color( LINE_COLOR)  # 3 -> b
         
-        screw2_swap = MathTex("d", "a", "+", "b", "=", "y_2", color="#000000").next_to(label2, RIGHT)
-        screw2_swap[5].set_color(ERROR_COLOR)  # 5 -> y2
-        screw2_swap[1].set_color( LINE_COLOR)  # 1 -> a
-        screw2_swap[3].set_color( LINE_COLOR)  # 3 -> b
-        
-        # Transform whole top-level groups: the OpenGL scene won't remove a lone submobject,
-        # which is why `line_eq` (not `screw1_eq`) is what's still showing the 1st equation.
-        screw1_shown = VGroup(*(screw1_swap[j] for j in SWAP))
-        screw2_shown = VGroup(*(screw2_swap[j] for j in SWAP))
+        # We want a term-by-term transformation, however, their indexing differs from `screw1_eq` to `swap1_eq`.
+        # A transform from `screw1_eq` to `swap1_eq` would erroneously transform y1 into 0, for example.
+        #
+        # `swap1_src` looks identical to `screw1_eq`, however, with indexing matching `swap1_eq`. Therefore,
+        # the old y1 transforms into the new y1, as intended.
+        SWAP = [3, 2, 4, 5, 1, 0]
+        swap1_src = VGroup(*(screw1_eq[i] for i in SWAP))
+        swap2_src = VGroup(*(screw2_eq[i] for i in SWAP))
+        self.remove(screw1_eq, screw2_eq)
         self.play(
             posts[1] .animate.set_opacity(0.5),
             screws[1].animate.set_opacity(0.5),
@@ -319,8 +322,8 @@ class FenceMath(Scene):
             y2_eq    .animate.set_opacity(0.5),
             FadeOut(label1)                   ,
             FadeOut(label2)                   ,
-            ReplacementTransform(line_eq  , screw1_shown),
-            ReplacementTransform(screw2_eq, screw2_shown),
+            TransformFromCopy(swap1_src, swap1_eq),
+            TransformFromCopy(swap2_src, swap2_eq),
             run_time = 2,
         )
         self.wait(2)
@@ -329,8 +332,8 @@ class FenceMath(Scene):
         MATRIX_H_BUFF = 0.8  # Column spacing (Matrix default: 1.3).
 
         # Row spacing equal to the old equations' line spacing, so each row lands on its line.
-        old_eq_signs = VGroup(screw1_swap[4], screw2_swap[4])
-        row_gap      = screw1_swap[4].get_y() - screw2_swap[4].get_y()
+        old_eq_signs = VGroup(swap1_eq[4], swap2_eq[4])
+        row_gap      = swap1_eq[4].get_y() - swap2_eq[4].get_y()
 
         coeffs   = Matrix([["0", "1"], ["d", "1"]], h_buff=MATRIX_H_BUFF, v_buff=row_gap)  # [0, 1, 2, 3] <=> [0, 1, d, 1]
         unknowns = Matrix([["a"], ["b"]]          ,                       v_buff=row_gap)
@@ -352,23 +355,23 @@ class FenceMath(Scene):
         
         # Both equations' a, b and = merge into the single copy each has in `matrix_eq`.
         self.play(
-            Transform(screw1_swap[0], coeffs  .get_entries()[0]),  # 0   -> 0
-            Transform(screw2_swap[0], coeffs  .get_entries()[2]),  # d   -> d
-            Transform(screw1_swap[1], unknowns.get_entries()[0]),  # a   -> a
-            Transform(screw2_swap[1], unknowns.get_entries()[0]),  # a   -> a
-            Transform(screw1_swap[3], unknowns.get_entries()[1]),  # b   -> b
-            Transform(screw2_swap[3], unknowns.get_entries()[1]),  # b   -> b
-            Transform(screw1_swap[4], eq_sign                  ),  # =   -> =
-            Transform(screw2_swap[4], eq_sign                  ),  # =   -> =
-            Transform(screw1_swap[5], rhs     .get_entries()[0]),  # y_1 -> y_1
-            Transform(screw2_swap[5], rhs     .get_entries()[1]),  # y_2 -> y_2
-            FadeOut(screw1_swap[2])                             ,  # +
-            FadeOut(screw2_swap[2])                             ,  # +
+            Transform(swap1_eq[0], coeffs  .get_entries()[0]),  # 0   -> 0
+            Transform(swap2_eq[0], coeffs  .get_entries()[2]),  # d   -> d
+            Transform(swap1_eq[1], unknowns.get_entries()[0]),  # a   -> a
+            Transform(swap2_eq[1], unknowns.get_entries()[0]),  # a   -> a
+            Transform(swap1_eq[3], unknowns.get_entries()[1]),  # b   -> b
+            Transform(swap2_eq[3], unknowns.get_entries()[1]),  # b   -> b
+            Transform(swap1_eq[4], eq_sign                  ),  # =   -> =
+            Transform(swap2_eq[4], eq_sign                  ),  # =   -> =
+            Transform(swap1_eq[5], rhs     .get_entries()[0]),  # y_1 -> y_1
+            Transform(swap2_eq[5], rhs     .get_entries()[1]),  # y_2 -> y_2
+            FadeOut(swap1_eq[2])                             ,  # +
+            FadeOut(swap2_eq[2])                             ,  # +
             FadeIn(new_parts)                                   ,
             run_time = 2,
         )
         # Swap the morphed pieces for the real thing, again whole top-level groups only.
-        self.remove(screw1_shown, screw2_shown, new_parts)
+        self.remove(swap1_eq, swap2_eq, new_parts)
         self.add(matrix_eq)
         self.wait(2)
         
