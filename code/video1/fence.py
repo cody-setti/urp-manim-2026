@@ -46,6 +46,36 @@ SCREW_COLOR  = "#CCCCCC"
 
 SCREW_NUDGE  = 0.3  # Installation error in where the rail got screwed on.
 
+# --- GLOW CONFIGURATION ---
+def glow(mob: Mobject) -> VGroup:
+    # Faint, ever-wider halos stack up into a radial falloff.
+    layers = VGroup()
+    for i in range(1, GLOW_LAYERS + 1):
+        spread = GLOW_SPREAD * i / GLOW_LAYERS
+
+        if isinstance(mob, Circle):  # Screws get round halos...
+            layer = Circle(radius=mob.width / 2 + spread)
+        else:                        # ...posts get their outline, grown by `spread`.
+            layer = RoundedRectangle(
+                width         = mob.width  + 2 * spread,
+                height        = mob.height + 2 * spread,
+                corner_radius = spread                 ,
+            )
+
+        layer.set_style(
+            stroke_width = 0         ,
+            fill_color   = GLOW_COLOR,
+            fill_opacity = 0         ,  # Starts unlit; the scene fades it up to `GLOW_OPACITY`.
+        )
+        layers.add(layer.move_to(mob))
+
+    return layers
+
+GLOW_COLOR   = "#6E61FF"  
+GLOW_SPREAD  = 0.2        # How far the light reaches past the mobject's edge.
+GLOW_LAYERS  = 20         
+GLOW_OPACITY = 0.05       # Per layer; stacks up to a bright core.
+
 def screwed_rail(screws: (Dot, Dot), base_length: float) -> Rectangle:
     # Create rail mobject.
     screwed_rail = rail(base_length)
@@ -99,21 +129,58 @@ class NakedFence(Scene):
         )
         self.wait(0.5)
         
+        
         # ---                            ---
         # --- FOCUS ON SCREWING TOP RAIL ---
         # ---                            ---
+        
+        # --- FADE BOTTOM RAIL ---
         self.play( rails[1].animate.set_opacity(RAIL_DIM) )
         
-        # --- SCREW TO THE END POSTS ---
+        # --- SCREW TOP RAIL TO THE END POSTS ---
         screws = VGroup(screw(posts[0]), screw(posts[4]))
-        
         top_rail.add_updater(lambda m: m.become(screwed_rail(screws, base_length)))
         
+        
+        # --- INITIALIZE SCREW AND RAIL "GLOW" MOBJECTS ---
+        glow_screws = VGroup(glow(screws[0]), glow(screws[1]))
+        self.add(glow_screws)  # Unlit, so invisible.
+        
+        glow_posts = VGroup(*(glow(p) for p in posts))
+        self.bring_to_back(glow_posts)
+        
+        
+        # --- "DRILL" FIRST SCREW ---
+        self.add(screws[0])
         self.play(
-            LaggedStart(
-                *(GrowFromCenter(s) for s in screws),
-                lag_ratio = 0.3,
-            ),
+            GrowFromCenter(screws[0])                            ,
+            glow_screws[0].animate.set_fill(opacity=GLOW_OPACITY),
+        )
+        self.wait(0.5)
+        
+        # --- HIGHLIGHT FIRST POST ---
+        self.play( glow_posts[0].animate.set_fill(opacity=GLOW_OPACITY) )
+        self.wait(2)
+        
+        self.play(
+            glow_screws[0].animate.set_fill(opacity=0),
+            glow_posts [0].animate.set_fill(opacity=0),
+        )
+        self.remove(glow_posts[0], glow_screws[0])
+        self.wait(0.5)
+        
+        # --- HIGHLIGHT REMAINING POSTS ---
+        self.play( *(g.animate.set_fill(opacity=GLOW_OPACITY) for g in glow_posts[1:]) )
+        self.play( *(g.animate.set_fill(opacity=           0) for g in glow_posts[1:]) )
+
+        # --- "DRILL" SECOND SCREW ---
+        self.add(screws[1])
+        glow_screws[1].add_updater(lambda m: m.move_to(screws[1]))  # This glow stays on, following the screw.
+
+        self.play(
+            GrowFromCenter(screws[1])                            ,
+            glow_screws[1].animate.set_fill(opacity=GLOW_OPACITY),
+            glow_posts [4].animate.set_fill(opacity=GLOW_OPACITY),
         )
         self.wait(1.5)
         
@@ -122,14 +189,21 @@ class NakedFence(Scene):
         self.wait(2)
         
         # --- SLIDE THAT PINNING POINT IN TO THE SECOND POST ---
-        self.play( screws[1].animate.set_x(posts[3].get_x()) )
-        self.wait(2)
+        # The old post goes dark as the screw leaves it; the new one lights up once the screw arrives.
+        for i in (3, 2, 1):
+            self.play(
+                glow_posts[i + 1].animate.set_fill(opacity=0)           ,
+                screws[1]        .animate.set_x(posts[i].get_x())       ,
+                glow_posts[i]    .animate.set_fill(opacity=GLOW_OPACITY),
+            )
+            self.remove(glow_posts[i + 1])
+            self.wait(1.5)
         
-        self.play( screws[1].animate.set_x(posts[2].get_x()) )
-        self.wait(2)
-        
-        self.play( screws[1].animate.set_x(posts[1].get_x()) )
-        self.wait(2)
+        self.play(
+            glow_screws[1].animate.set_fill(opacity=0),
+            glow_posts [1].animate.set_fill(opacity=0),
+        )
+        self.remove(glow_posts[1])
 
 class FenceMath(Scene):
     def construct(self):
